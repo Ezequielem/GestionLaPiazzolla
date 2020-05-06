@@ -1,0 +1,70 @@
+﻿@model GestionLaPiazzolla.Models.LaPiazzollaViewModels.CursoIndexData
+
+@{
+    ViewData["Title"] = "Indice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Cursos</h1>
+
+<p>
+    <a asp-action="Create">Nuevo curso</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cursos.First().Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cursos.First().PrecioMensual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cursos.First().Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cursos.First().Profesor)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Cursos)
+{
+    string filaSeleccionada = "";
+    if (item.CursoId == (int?)ViewData["CursoId"])
+    {
+        filaSeleccionada = "success";
+    }
+        <tr class="@filaSeleccionada">
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrecioMensual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Profesor.Nombre) 
+                &nbsp;
+                @Html.DisplayFor(modelItem => item.Profesor.Apellido)
+            </td>
+            <td>
+                @{ 
+                    foreach (var alumno in item.Alumnos_X_Cursos)
+                    {
+                        @alumno.Alumno.AlumnoId @:  @alumno.Alumno.Nombre <br />
+                    }
+                }
+            </td>
+            <td>
+                <a asp-action="Index" asp-route-id="@item.CursoId">Seleccionar</a> |
+                <a asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.CursoId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.CursoId">Borrar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

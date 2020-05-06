@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewData["Title"] = "Contacto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container-fluid">
+        <h1 class="text-center">Nuestros medios de contacto</h1>
+        <br />
+        <br />
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a href="https://www.youtube.com/channel/UCStzyFZdEH9TeCZINwBqfkg" class="btn btn-light"><img src="~/Images/youtube.png" /></a>
+            </li>
+            <li class="list-group-item">
+                <a href="https://www.instagram.com/lapiazzollaacademiademusica/" class="btn btn-light"><img src="~/Images/instagram.png" /></a>
+            </li>
+            <li class="list-group-item">
+                <a href="https://www.facebook.com/LaPiazzollaacademia/" class="btn btn-light"><img src="~/Images/facebook.png" /></a>
+            </li>
+            <li class="list-group-item">
+                <a href="tel:+5493516371917" class="btn btn-light"><img src="~/Images/llamanos2.png" /></a>
+            </li>
+            <li class="list-group-item">
+                <a href="https://api.whatsapp.com/send?phone=+5493516371917" class="btn btn-light"><img src="~/Images/whatsapp.png" /></a>
+            </li>
+            <li class="list-group-item">
+
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal" data-whatever="correo@dominio" data-content="Redacte su mensaje......"><img src="~/Images/hotmail.png" /></button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="remitente-name" class="col-form-label">Introduzca su correo:</label>
+                                        <input type="email" class="form-control" id="email" />
+                                    </div>  
+                                    <div class="form-group">
+                                        <label for="mensaje-text" class="col-form-label">Comentario:</label>
+                                        <textarea class="form-control" id="mensaje"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit"  class="btn btn-primary" id="enviar">Enviar mensaje</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3404.154900029103!2d-64.18199738485134!3d-31.43740228139715!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432a2ec31d33e5d%3A0xc53d919653c01151!2sWenceslao%20Paunero%202315%2C%20C%C3%B3rdoba!5e0!3m2!1ses-419!2sar!4v1584577975519!5m2!1ses-419!2sar" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0" class="container-fluid"></iframe>
+            </li>
+        </ul>        
+    </div>
+
+@section scripts{ 
+    <script>
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Botón que activó el modal
+            var recipient = button.data('whatever') // Extraer información de los atributos data- *
+            var contenido = button.data('content')
+            // Si es necesario, puede iniciar una solicitud AJAX aquí (y luego realizar la actualización en una devolución de llamada).
+            // Actualiza el contenido del modal. Usaremos jQuery aquí, pero en su lugar podría usar una biblioteca de enlace de datos u otros métodos.
+            var modal = $(this)
+            modal.find('.modal-title').text('Nuevo mensaje')
+            modal.find('.modal-body input').val(recipient)
+            modal.find('.modal-body textarea').val(contenido)
+        })
+
+        $('#enviar').click(function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/EnviarEmail",
+                data: {
+                    email: $('#email').val().trim(),
+                    mensaje: $('#mensaje').val()
+                },
+                success: function (resultado) {
+                    $('#exampleModal').modal('toggle');
+                    alert('A la brevedad nos contactaremos con usted');                    
+                 },
+                error: function (xhr, textStatus, errorThrown) {
+                    $('#exampleModal').modal('toggle');
+                    alert('Error!!');                
+                }
+            });
+        });        
+    </script>    
+}

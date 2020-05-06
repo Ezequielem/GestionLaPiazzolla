@@ -22,6 +22,7 @@ namespace GestionLaPiazzolla.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        [Display(Name = "Nombre de usuario")]
         public string Username { get; set; }
 
         [TempData]
@@ -33,7 +34,7 @@ namespace GestionLaPiazzolla.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Número de télefono")]
             public string PhoneNumber { get; set; }
         }
 
@@ -88,7 +89,7 @@ namespace GestionLaPiazzolla.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Tu perfil ha sido actualizado";
             return RedirectToPage();
         }
     }

@@ -45,7 +45,7 @@ namespace GestionLaPiazzolla.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [Display(Name = "Nuevo email")]
             public string NewEmail { get; set; }
         }
 

@@ -131,7 +131,7 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores
+            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia)
                 .FirstOrDefaultAsync(m => m.ProfesorId == id);
             if (profesor == null)
             {
@@ -147,7 +147,9 @@ namespace GestionLaPiazzolla.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var profesor = await _context.Profesores.FindAsync(id);
+            var direccion = await _context.Direcciones.FindAsync(profesor.DireccionId);
             _context.Profesores.Remove(profesor);
+            _context.Direcciones.Remove(direccion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -35,7 +35,7 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores
+            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia)
                 .FirstOrDefaultAsync(m => m.ProfesorId == id);
             if (profesor == null)
             {
@@ -196,7 +196,7 @@ namespace GestionLaPiazzolla.Controllers
                                       orderby l.Nombre
                                       select new
                                       {
-                                          id = l.DepartamentoId,
+                                          id = l.LocalidadId,
                                           nombre = l.Nombre
                                       };
             return Json(consultaLocalidades);

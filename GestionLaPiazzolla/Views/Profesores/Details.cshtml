@@ -11,35 +11,82 @@
     <h4>Profesor</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nombre)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Apellido)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Apellido)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Dni)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Dni)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FechaDeNacimiento)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaDeNacimiento)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Calle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Calle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Altura)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Altura)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Piso)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Piso)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Departamento)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Departamento)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.CodigoPostal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.CodigoPostal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Localidad.Departamento.Provincia)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Localidad.Departamento.Provincia.Nombre)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Localidad.Departamento)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Localidad.Departamento.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Direccion.Localidad)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Direccion.Localidad.Nombre)
         </dd>
     </dl>
 </div>

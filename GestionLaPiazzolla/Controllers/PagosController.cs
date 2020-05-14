@@ -8,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using GestionLaPiazzolla.Data;
 using GestionLaPiazzolla.Models;
 using Microsoft.AspNetCore.Authorization;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Auth.OAuth2;
+using System.IO;
+using Google.Apis.Services;
+using Google.Apis.Calendar.v3.Data;
 
 namespace GestionLaPiazzolla.Controllers
 {
@@ -50,6 +55,7 @@ namespace GestionLaPiazzolla.Controllers
         // GET: Pagos/Create
         public IActionResult Create()
         {
+            //crearEvento();
             ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "AlumnoId", "Apellido");
             return View();
         }
@@ -158,5 +164,128 @@ namespace GestionLaPiazzolla.Controllers
         {
             return _context.Pagos.Any(e => e.PagoId == id);
         }
+
+        private void crearEvento()
+        {
+
+            string acumulador = "";
+            string camino = Path.Combine("wwwroot", "js", "lapiazzolla-413c1340968e.json");
+            string calendarId = @"ezemense@gmail.com";
+
+            string[] Scopes = { CalendarService.Scope.Calendar };
+
+            ServiceAccountCredential credential;
+
+            using (var stream =
+                new FileStream(camino, FileMode.Open, FileAccess.Read))
+            {
+                var confg = Google.Apis.Json.NewtonsoftJsonSerializer.Instance.Deserialize<JsonCredentialParameters>(stream);
+                credential = new ServiceAccountCredential(
+                   new ServiceAccountCredential.Initializer(confg.ClientEmail)
+                   {
+                       Scopes = Scopes
+                   }.FromPrivateKey(confg.PrivateKey));
+            }
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "Calendar API Sample",
+            });
+
+            var calendar = service.Calendars.Get(calendarId).Execute();
+            //Console.WriteLine("Calendar Name :");
+            //Console.WriteLine(calendar.Summary);
+            acumulador += "Calendar Name : \n";
+            acumulador += calendar.Summary + "\n";
+            acumulador += "\n\nclick for more .. \n\n";            
+
+
+            // Define parameters of request.
+            EventsResource.ListRequest listRequest = service.Events.List(calendarId);
+            listRequest.TimeMin = DateTime.Now;
+            listRequest.ShowDeleted = false;
+            listRequest.SingleEvents = true;
+            listRequest.MaxResults = 10;
+            listRequest.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            // List events.
+            Events events = listRequest.Execute();
+            acumulador += "Upcoming events:\n";
+            //Console.WriteLine("Upcoming events:");
+            if (events.Items != null && events.Items.Count > 0)
+            {
+                foreach (var eventItem in events.Items)
+                {
+                    string when = eventItem.Start.DateTime.ToString();
+                    if (String.IsNullOrEmpty(when))
+                    {
+                        when = eventItem.Start.Date;
+                    }
+                    acumulador += eventItem.Summary + " " + when + "\n";
+                    //Console.WriteLine("{0} ({1})", eventItem.Summary, when);
+                }
+            }
+            else
+            {
+                acumulador += "No upcoming events found.\n\n";
+                //Console.WriteLine("No upcoming events found.");
+            }
+            acumulador += "click for more .. \n\n";
+            //Console.WriteLine("click for more .. ");
+
+
+            var myevent = DB.Find(x => x.Id == "eventid" + 1);
+
+            var InsertRequest = service.Events.Insert(myevent, calendarId);
+
+            try
+            {
+                InsertRequest.Execute();
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    acumulador += e.Message;
+                    service.Events.Update(myevent, calendarId, myevent.Id).Execute();
+                    //Console.WriteLine("Insert/Update new Event ");
+                    acumulador += "Insert/Update new Event ";
+
+                }
+                catch (Exception t)
+                {
+                    //Console.WriteLine("can't Insert/Update new Event ");
+                    acumulador += "can't Insert/Update new Event \n\n" + t.Message;
+                }
+            }
+        }
+
+
+        static List<Event> DB =
+             new List<Event>() {
+                new Event(){
+                    Id = "eventid" + 1,
+                    Summary = "Google I/O 2015",
+                    Location = "800 Howard St., San Francisco, CA 94103",
+                    Description = "Una oportunidad de escuchar más sobre los productos para desarrolladores de Google.",
+                    Start = new EventDateTime()
+                    {
+                        DateTime = new DateTime(2019, 01, 13, 15, 30, 0),
+                        TimeZone = "America/Los_Angeles",
+                    },
+                    End = new EventDateTime()
+                    {
+                        DateTime = new DateTime(2019, 01, 14, 15, 30, 0),
+                        TimeZone = "America/Los_Angeles",
+                    },
+                     Recurrence = new List<string> { "RRULE:FREQ=DAILY;COUNT=2" },
+                    Attendees = new List<EventAttendee>
+                    {
+                        new EventAttendee() { Email = "lpage@example.com"},
+                        new EventAttendee() { Email = "sbrin@example.com"}
+                    }
+                }
+            };
     }
 }

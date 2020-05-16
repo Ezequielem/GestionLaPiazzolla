@@ -35,7 +35,7 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores
+            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia)
                 .FirstOrDefaultAsync(m => m.ProfesorId == id);
             if (profesor == null)
             {
@@ -80,7 +80,12 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores.FindAsync(id);
+            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia).
+                FirstOrDefaultAsync(m => m.ProfesorId == id);           
+            listaDeSexos();
+            listaProvincias();
+            listaDepartamentosProvinciaSeleccionada(profesor.Direccion.Localidad.Departamento.Provincia.ProvinciaId);
+            listaLocalidadesDepartamentosSeleccionados(profesor.Direccion.Localidad.Departamento.DepartamentoId);
             if (profesor == null)
             {
                 return NotFound();
@@ -93,17 +98,25 @@ namespace GestionLaPiazzolla.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfesorId,Nombre,Apellido,Dni,FechaDeNacimiento,Email")] Profesor profesor)
+        public async Task<IActionResult> Edit(int id, [Bind("ProfesorId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,Direccion")] Profesor profesor)
         {
             if (id != profesor.ProfesorId)
             {
                 return NotFound();
             }
-
+            if (profesor.Direccion.LocalidadId == 0)
+            {
+                ModelState.AddModelError("Localidad", "Debe seleccionar una localidad");                
+            }
+            if (profesor.Direccion.Localidad.DepartamentoId == 0)
+            {
+                ModelState.AddModelError("Departamento", "Debe seleccionar un Departamento");
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
+                    profesor.Direccion.Localidad = null;
                     _context.Update(profesor);
                     await _context.SaveChangesAsync();
                 }
@@ -120,6 +133,16 @@ namespace GestionLaPiazzolla.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            listaDeSexos(profesor.SexoId);
+            listaProvincias(profesor.Direccion.Localidad.Departamento.ProvinciaId);
+            if (profesor.Direccion.Localidad.DepartamentoId != 0)
+            {
+                listaDepartamentosProvinciaSeleccionada(profesor.Direccion.Localidad.Departamento.Provincia.ProvinciaId, profesor.Direccion.Localidad.DepartamentoId);
+                if (profesor.Direccion.LocalidadId != 0)
+                {
+                    listaLocalidadesDepartamentosSeleccionados(profesor.Direccion.Localidad.Departamento.DepartamentoId, profesor.Direccion.LocalidadId);
+                }                
+            }            
             return View(profesor);
         }
 
@@ -131,7 +154,7 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores
+            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia)
                 .FirstOrDefaultAsync(m => m.ProfesorId == id);
             if (profesor == null)
             {
@@ -146,8 +169,9 @@ namespace GestionLaPiazzolla.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var profesor = await _context.Profesores.FindAsync(id);
+            var profesor = await _context.Profesores.Include(m => m.Direccion).FirstOrDefaultAsync(m => m.ProfesorId == id);            
             _context.Profesores.Remove(profesor);
+            _context.Direcciones.Remove(profesor.Direccion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -162,6 +186,32 @@ namespace GestionLaPiazzolla.Controllers
             var consultaSexo = from s in _context.Sexo
                                select s;
             ViewBag.SexoId = new SelectList(consultaSexo.AsNoTracking(), "SexoId", "Descripcion", sexoSeleccionado);
+        }
+
+        public void listaProvincias(object provinciaSeleccionada = null)
+        {
+            var consultaProvincias = from p in _context.Provincias
+                                     orderby p.Nombre
+                                     select p;
+            ViewBag.ProvinciaId = new SelectList(consultaProvincias.AsNoTracking(), "ProvinciaId", "Nombre", provinciaSeleccionada);
+        }
+
+        public void listaDepartamentosProvinciaSeleccionada(int idProvincia, object departamentoSeleccionado = null)
+        {
+            var consultaDepartamentos = from d in _context.Departamentos
+                                        where d.ProvinciaId == idProvincia
+                                        orderby d.Nombre
+                                        select d;
+            ViewBag.DepartamentoId = new SelectList(consultaDepartamentos.AsNoTracking(), "DepartamentoId", "Nombre", departamentoSeleccionado);
+        }
+
+        public void listaLocalidadesDepartamentosSeleccionados(int idDepartamento, object localidadSeleccionada = null) 
+        {
+            var consultaLocalidades = from l in _context.Localidades
+                                      where l.DepartamentoId == idDepartamento
+                                      orderby l.Nombre
+                                      select l;
+            ViewBag.LocalidadId = new SelectList(consultaLocalidades, "LocalidadId", "Nombre", localidadSeleccionada);
         }
 
         public JsonResult obtenerProvincias()
@@ -196,7 +246,7 @@ namespace GestionLaPiazzolla.Controllers
                                       orderby l.Nombre
                                       select new
                                       {
-                                          id = l.DepartamentoId,
+                                          id = l.LocalidadId,
                                           nombre = l.Nombre
                                       };
             return Json(consultaLocalidades);

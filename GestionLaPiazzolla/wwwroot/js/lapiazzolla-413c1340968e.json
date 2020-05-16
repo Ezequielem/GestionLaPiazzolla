@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lapiazzolla",
+  "private_key_id": "413c1340968e5cd69e94ee62620e040ec560f102",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJFEQnKJiJgacy\nXD5bQ35/1EYFXYnj4XFSTIDFwWDrufLDGjvPSBmjQD6ekICyz/vASy9ZS80misn8\nsZbONe802BYv1fZLxmixLV94UH6A9DMMnNnzXrimUGwYFHwpbc2BCnajGmyjVhjw\nN4ABrCLWP1C85UE4BssI8XVJzghhValtVUiLYylQqWXePAfBOJiaDNfblX+QYUw2\nZOeDkrvjmBGvGWXrOtNM3rmorig0PXu8X5jj6md8ai3qryOvxCJrjzz0CR3vOhi9\nNnNNxA5U6tuO/2c1zygsdKbkgTqzY0vd5/klzy/TYuXqOMUNINcgy++/j1QN8gDb\nVU+GtwIxAgMBAAECggEAQgri+42M1BT+aj77yBPZ93gr61U2ld8UzjgMT2ddQu8W\n+dei70i6CvFt37yMWK6Q/C51hbmszszk3JcjdeUnBM84MkvvEiI/fnntkmG1uvr5\nzVmzCAkDUrS1XA9WXHEQ/yIFpzpllhwQIs3HwETeSEoRZYlSq2knxG8x26TNAdKA\nZ+tgY/HY4jcJPKEHhFquvJN0Rfb4GMpi934nGd+YcN3dES3Wn+eOc8CTMvjlzWVe\nZRqAV3V4O2novY3B+NQdM4Tk/1hhqR9jlBTVvvZ3dJt8DQRqfiU5h42uTe1Xfhvv\nBgfwsex0yMlD5GcrYlTTj/QFsY9ufVSS+4ppGqGT9QKBgQDzEmYp1QPszi3EIh9R\nBzU5RQ2Rid1NldnD7QUsXR7+a4/WdjSkr2rWfBfdY0bAA5YnS8FP4KH3+A6tZLLW\nZWqGqxeKarpIvph44fNPxtdwlulx5F88ZFRiWDcCWddAFjtbXwP0vIyUkhkDRFcc\nB5IB84OA/Ltxc2t7hIlxLLwvdwKBgQDTxhsV0wsnYwCy5o4+eG6WiXSgTDvgG+tt\nAVLnNsj2cYXiGzuyMR5MuM/RCZeWvIDMbJyOLxBZ6JdYtiWZvpe2zRvdQPIN4/ev\n0soXpfBntfReuxF9segZM+ILHOHuZO6Z2sD4rJv5nMUmVfh/Y8XgHwcq0gmbHeJw\ndAyACc/VlwKBgQCWpEh8lG+iSwVCEIOoC/eITqtiDzb/5mbXbgVOwUd8Fd1G5Gsr\nxStJUg7YPbaTOaXNJL3hay32J92wyD+tb5zdaRtlxU891iFYiW/peSn7tQtockgz\nfVpuuI0e/97O8PhIYFJrUo8tZH3r8GasEGUEoI5XWkowvX9XRYSIh1j5cQKBgHze\nnAvjU/lWbAwQ3CDDvFlxFV6LdOaxL8Enfa2t5RNDXvEyo6FvSvFsK8WTRVnxLnTb\nOfiwkZCiD9OUG1mrQyPbjymH6PH90IdQ4C7PfpB4fm35Gdgmtbdem1N4JVP/GZ2I\nmi5HAPVO1gTDvnHG7982DHDYRie7mFA8bT52CqFjAoGAIv6apCTU+elGXDAk91QJ\nqzngQIbh8W9hTSpxiQB+40NRrn3XkqlV3tFoBnja9AZMff38ao9CWV21ZdjmRzZ6\n5s2p2pf2y+Vsw+hF9I+Qqef857W8JnvRWbMka6atLDoTqo7gTyoY0CXgU32wdZV/\nkBnyVyUT71ulXfZfO4atS9o=\n-----END PRIVATE KEY-----\n",
+  "client_email": "lapiazzola-service@lapiazzolla.iam.gserviceaccount.com",
+  "client_id": "104904444110277419913",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lapiazzola-service%40lapiazzolla.iam.gserviceaccount.com"
+}

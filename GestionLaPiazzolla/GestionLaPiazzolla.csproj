@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-GestionLaPiazzolla-3C75A388-A507-448E-8D9B-16FC96A64B0B</UserSecretsId>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
 

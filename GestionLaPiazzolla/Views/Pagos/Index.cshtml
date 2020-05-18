@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<GestionLaPiazzolla.Models.Pago>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pagos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Pagos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nuevo pago</a>
 </p>
 <table class="table">
     <thead>
@@ -44,9 +44,9 @@
                 @Html.DisplayFor(modelItem => item.Alumno.Apellido)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PagoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PagoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PagoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PagoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.PagoId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.PagoId">Borrar</a>
             </td>
         </tr>
 }

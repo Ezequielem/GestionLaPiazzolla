@@ -98,7 +98,7 @@ namespace GestionLaPiazzolla.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfesorId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,Direccion")] Profesor profesor)
+        public async Task<IActionResult> Edit(int id, [Bind("ProfesorId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,Direccion,DireccionId")] Profesor profesor)
         {
             if (id != profesor.ProfesorId)
             {
@@ -106,7 +106,7 @@ namespace GestionLaPiazzolla.Controllers
             }
             if (profesor.Direccion.LocalidadId == 0)
             {
-                ModelState.AddModelError("Localidad", "Debe seleccionar una localidad");                
+                ModelState.AddModelError("Localidad", "Debe seleccionar una localidad");
             }
             if (profesor.Direccion.Localidad.DepartamentoId == 0)
             {
@@ -141,10 +141,10 @@ namespace GestionLaPiazzolla.Controllers
                 if (profesor.Direccion.LocalidadId != 0)
                 {
                     listaLocalidadesDepartamentosSeleccionados(profesor.Direccion.Localidad.Departamento.DepartamentoId, profesor.Direccion.LocalidadId);
-                }                
-            }            
+                }
+            }
             return View(profesor);
-        }
+        }      
 
         // GET: Profesores/Delete/5
         public async Task<IActionResult> Delete(int? id)

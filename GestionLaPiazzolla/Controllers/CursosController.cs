@@ -115,7 +115,7 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
             var cursoAModdificar = await _context.Cursos.FirstOrDefaultAsync(c => c.CursoId == id);
-            if (await TryUpdateModelAsync<Curso>(cursoAModdificar, "", c => c.Nombre, c => c.PrecioMensual, c => c.Descripcion, c => c.Profesor))
+            if (await TryUpdateModelAsync<Curso>(cursoAModdificar, "", c => c.Nombre, c => c.PrecioMensual, c => c.Descripcion, c => c.ProfesorId))
             {
                 try
                 {
@@ -124,9 +124,9 @@ namespace GestionLaPiazzolla.Controllers
                 catch (DbUpdateException /* ex */)
                 {
                     //Log the error (uncomment ex variable name and write a log.)
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                "Try again, and if the problem persists, " +
-                "see your system administrator.");
+                    ModelState.AddModelError("", "No se pueden guardar los cambios. " +
+                "Intente nuevamente, y si el problema persiste, " +
+                "consulte a su administrador del sistema.");
                 }
                 return RedirectToAction(nameof(Index));
             }

@@ -8,7 +8,7 @@
 <h1>Cursos</h1>
 
 <p>
-    <a asp-action="Create">Nuevo curso</a>
+    <a class="btn btn-info" asp-action="Create">Nuevo curso</a>
 </p>
 <table class="table">
     <thead>
@@ -59,10 +59,10 @@
                 }
             </td>
             <td>
-                <a asp-action="Index" asp-route-id="@item.CursoId">Seleccionar</a> |
-                <a asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.CursoId">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.CursoId">Borrar</a>
+                <a class="btn btn-primary" asp-action="Index" asp-route-id="@item.CursoId">Seleccionar</a> |
+                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
+                <a class="btn btn-warning" asp-action="Details" asp-route-id="@item.CursoId">Detalles</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CursoId">Borrar</a>
             </td>
         </tr>
 }

@@ -35,20 +35,61 @@
                 <span asp-validation-for="FechaDeNacimiento" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="SexoId" class="control-label"></label>
                 <select asp-for="SexoId" class="form-control" asp-items="ViewBag.SexoId"></select>
                 <span asp-validation-for="SexoId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DireccionId" class="control-label"></label>
-                <select asp-for="DireccionId" class="form-control" asp-items="ViewBag.DireccionId"></select>
-                <span asp-validation-for="DireccionId" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Calle" class="control-label"></label>
+                <input asp-for="Direccion.Calle" class="form-control" />
+                <span asp-validation-for="Direccion.Calle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Altura" class="control-label"></label>
+                <input asp-for="Direccion.Altura" class="form-control" />
+                <span asp-validation-for="Direccion.Altura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Piso" class="control-label"></label>
+                <input asp-for="Direccion.Piso" class="form-control" />
+                <span asp-validation-for="Direccion.Piso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Departamento" class="control-label"></label>
+                <input asp-for="Direccion.Departamento" class="form-control" />
+                <span asp-validation-for="Direccion.Departamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.CodigoPostal" class="control-label"></label>
+                <input asp-for="Direccion.CodigoPostal" class="form-control" />
+                <span asp-validation-for="Direccion.CodigoPostal" class="text-danger"></span>
+            </div>
+            <div id="Provincia" class="form-group">
+                <label asp-for="Direccion.Localidad.Departamento.Provincia" class="control-label"></label>
+                <select asp-for="Direccion.Localidad.Departamento.ProvinciaId" class="form-control" asp-items="ViewBag.ProvinciaId" id="provincia">
+                    -- seleccione Provincia --
+                </select>
+                <span asp-validation-for="Direccion.Localidad.Departamento.ProvinciaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Localidad.Departamento" class="control-label"></label>
+                <select asp-for="Direccion.Localidad.DepartamentoId" class="form-control" asp-items="ViewBag.DepartamentoId" id="departamento">
+                </select>
+                <span asp-validation-for="Direccion.Localidad.DepartamentoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Localidad" class="control-label"></label>
+                <select asp-for="Direccion.LocalidadId" class="form-control" asp-items="ViewBag.LocalidadId" id="localidad">
+                </select>
+                <span asp-validation-for="Direccion.LocalidadId" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(model => model.DireccionId)
+            @Html.HiddenFor(model => model.Direccion.DireccionId)
             <div class="form-group">
                 <input type="submit" value="Guardar cambios" class="btn btn-primary" />
             </div>
@@ -60,6 +101,63 @@
     <a asp-action="Index">Volver al listado</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            $("#provincia").change(function () {
+                $.get("/Alumnos/obtenerDepartamentos", { ProvId: $("#provincia").val() }, function (data) {
+                    // VACIAMOS EL DropDownList
+                    $("#departamento").empty();
+                    $("#localidad").empty();
+                    // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
+                    $("#departamento").append("<option value> -- seleccione Departamento de " + $("#provincia option:selected").text() + " --</option>")
+                    // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
+                    $.each(data, function (index, row) {
+                        $("#departamento").append("<option value='" + row.id + "'>" + row.nombre + "</option>")
+                    });
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#departamento").change(function () {
+                $.get("/Alumnos/obtenerLocalidades", { DeptoId: $("#departamento").val() }, function (data) {
+                    $("#localidad").empty();
+                    $("#localidad").append("<option value> -- seleccione localidad de " + $("#departamento option:selected").text() + " -- </option>")
+                    $.each(data, function (index, row) {
+                        $("#localidad").append("<option value='" + row.id + "'>" + row.nombre + "</option>")
+                    });
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#localidad").submit(function () {
+                var form = $(this);
+
+                if (form.validate()) {
+                    form.ajaxSubmit({
+                        dataType: 'JSON',
+                        type: 'POST',
+                        url: form.attr('action'),
+                        success: function (r) {
+                            if (r.respuesta) {
+                                window.location.href = r.redirect;
+                            }
+                            else {
+                                $("#localidades").text(r.error)
+                                    .show();
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                }
+
+                return false;
+            })
+        })
+    </script>
 }

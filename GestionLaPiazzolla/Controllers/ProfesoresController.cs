@@ -35,7 +35,9 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia)
+            var profesor = await _context.Profesores
+                .Include(p => p.Direccion.Localidad.Departamento.Provincia)
+                .Include(p => p.Sexo)
                 .FirstOrDefaultAsync(m => m.ProfesorId == id);
             if (profesor == null)
             {
@@ -154,7 +156,8 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores.Include(m => m.Direccion.Localidad.Departamento.Provincia)
+            var profesor = await _context.Profesores
+                .Include(m => m.Direccion.Localidad.Departamento.Provincia)
                 .FirstOrDefaultAsync(m => m.ProfesorId == id);
             if (profesor == null)
             {

@@ -28,12 +28,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sexo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -54,12 +48,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sexo.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion.Calle)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AlumnoId">Editar</a> |

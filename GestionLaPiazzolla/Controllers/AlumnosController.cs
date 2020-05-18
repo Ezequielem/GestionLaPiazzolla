@@ -24,8 +24,7 @@ namespace GestionLaPiazzolla.Controllers
         // GET: Alumnos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Alumnos.Include(a => a.Direccion).Include(a => a.Sexo);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Alumnos.ToListAsync());
         }
 
         // GET: Alumnos/Details/5
@@ -37,7 +36,7 @@ namespace GestionLaPiazzolla.Controllers
             }
 
             var alumno = await _context.Alumnos
-                .Include(a => a.Direccion)
+                .Include(a => a.Direccion.Localidad.Departamento.Provincia)
                 .Include(a => a.Sexo)
                 .FirstOrDefaultAsync(m => m.AlumnoId == id);
             if (alumno == null)
@@ -51,8 +50,9 @@ namespace GestionLaPiazzolla.Controllers
         // GET: Alumnos/Create
         public IActionResult Create()
         {
-            ViewData["DireccionId"] = new SelectList(_context.Direcciones, "DireccionId", "Calle");
-            ViewData["SexoId"] = new SelectList(_context.Sexo, "SexoId", "Descripcion");
+            var alumno = new Alumno();
+            alumno.Direccion = new Direccion();
+            listaDeSexos();
             return View();
         }
 
@@ -61,16 +61,16 @@ namespace GestionLaPiazzolla.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlumnoId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,DireccionId")] Alumno alumno)
+        public async Task<IActionResult> Create([Bind("AlumnoId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,Direccion")] Alumno alumno)
         {
             if (ModelState.IsValid)
             {
+                alumno.Direccion.Localidad = null;
                 _context.Add(alumno);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DireccionId"] = new SelectList(_context.Direcciones, "DireccionId", "Calle", alumno.DireccionId);
-            ViewData["SexoId"] = new SelectList(_context.Sexo, "SexoId", "Descripcion", alumno.SexoId);
+            listaDeSexos(alumno.SexoId);
             return View(alumno);
         }
 
@@ -82,13 +82,16 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos.FindAsync(id);
+            var alumno = await _context.Alumnos.Include(a => a.Direccion.Localidad.Departamento.Provincia)
+                .FirstOrDefaultAsync(a => a.AlumnoId == id);
+            listaDeSexos();
+            listaProvincias();
+            listaDepartamentosProvinciaSeleccionada(alumno.Direccion.Localidad.Departamento.Provincia.ProvinciaId);
+            listaLocalidadesDepartamentosSeleccionados(alumno.Direccion.Localidad.Departamento.DepartamentoId);
             if (alumno == null)
             {
                 return NotFound();
-            }
-            ViewData["DireccionId"] = new SelectList(_context.Direcciones, "DireccionId", "Calle", alumno.DireccionId);
-            ViewData["SexoId"] = new SelectList(_context.Sexo, "SexoId", "Descripcion", alumno.SexoId);
+            }            
             return View(alumno);
         }
 
@@ -97,17 +100,25 @@ namespace GestionLaPiazzolla.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlumnoId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,DireccionId")] Alumno alumno)
+        public async Task<IActionResult> Edit(int id, [Bind("AlumnoId,Nombre,Apellido,Dni,FechaDeNacimiento,Email,SexoId,Direccion,DireccionId")] Alumno alumno)
         {
             if (id != alumno.AlumnoId)
             {
                 return NotFound();
             }
-
+            if (alumno.Direccion.LocalidadId == 0)
+            {
+                ModelState.AddModelError("Localidad", "Debe seleccionar una localidad");
+            }
+            if (alumno.Direccion.Localidad.DepartamentoId == 0)
+            {
+                ModelState.AddModelError("Departamento", "Debe seleccionar un Departamento");
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
+                    alumno.Direccion.Localidad = null;
                     _context.Update(alumno);
                     await _context.SaveChangesAsync();
                 }
@@ -124,8 +135,16 @@ namespace GestionLaPiazzolla.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DireccionId"] = new SelectList(_context.Direcciones, "DireccionId", "Calle", alumno.DireccionId);
-            ViewData["SexoId"] = new SelectList(_context.Sexo, "SexoId", "Descripcion", alumno.SexoId);
+            listaDeSexos(alumno.SexoId);
+            listaProvincias(alumno.Direccion.Localidad.Departamento.ProvinciaId);
+            if (alumno.Direccion.Localidad.DepartamentoId != 0)
+            {
+                listaDepartamentosProvinciaSeleccionada(alumno.Direccion.Localidad.Departamento.Provincia.ProvinciaId, alumno.Direccion.Localidad.DepartamentoId);
+                if (alumno.Direccion.LocalidadId != 0)
+                {
+                    listaLocalidadesDepartamentosSeleccionados(alumno.Direccion.Localidad.Departamento.DepartamentoId, alumno.Direccion.LocalidadId);
+                }
+            }
             return View(alumno);
         }
 
@@ -138,8 +157,7 @@ namespace GestionLaPiazzolla.Controllers
             }
 
             var alumno = await _context.Alumnos
-                .Include(a => a.Direccion)
-                .Include(a => a.Sexo)
+                .Include(a => a.Direccion.Localidad.Departamento.Provincia)
                 .FirstOrDefaultAsync(m => m.AlumnoId == id);
             if (alumno == null)
             {
@@ -154,8 +172,9 @@ namespace GestionLaPiazzolla.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var alumno = await _context.Alumnos.FindAsync(id);
+            var alumno = await _context.Alumnos.Include(a => a.Direccion).FirstOrDefaultAsync(a => a.AlumnoId == id);            
             _context.Alumnos.Remove(alumno);
+            _context.Direcciones.Remove(alumno.Direccion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -163,6 +182,77 @@ namespace GestionLaPiazzolla.Controllers
         private bool AlumnoExists(int id)
         {
             return _context.Alumnos.Any(e => e.AlumnoId == id);
+        }
+
+        public void listaDeSexos(object sexoSeleccionado = null)
+        {
+            var consultaSexo = from s in _context.Sexo
+                               select s;
+            ViewBag.SexoId = new SelectList(consultaSexo.AsNoTracking(), "SexoId", "Descripcion", sexoSeleccionado);
+        }
+
+        public void listaProvincias(object provinciaSeleccionada = null)
+        {
+            var consultaProvincias = from p in _context.Provincias
+                                     orderby p.Nombre
+                                     select p;
+            ViewBag.ProvinciaId = new SelectList(consultaProvincias.AsNoTracking(), "ProvinciaId", "Nombre", provinciaSeleccionada);
+        }
+
+        public void listaDepartamentosProvinciaSeleccionada(int idProvincia, object departamentoSeleccionado = null)
+        {
+            var consultaDepartamentos = from d in _context.Departamentos
+                                        where d.ProvinciaId == idProvincia
+                                        orderby d.Nombre
+                                        select d;
+            ViewBag.DepartamentoId = new SelectList(consultaDepartamentos.AsNoTracking(), "DepartamentoId", "Nombre", departamentoSeleccionado);
+        }
+
+        public void listaLocalidadesDepartamentosSeleccionados(int idDepartamento, object localidadSeleccionada = null)
+        {
+            var consultaLocalidades = from l in _context.Localidades
+                                      where l.DepartamentoId == idDepartamento
+                                      orderby l.Nombre
+                                      select l;
+            ViewBag.LocalidadId = new SelectList(consultaLocalidades, "LocalidadId", "Nombre", localidadSeleccionada);
+        }
+
+        public JsonResult obtenerProvincias()
+        {
+            var consultaProvincias = from p in _context.Provincias
+                                     orderby p.Nombre
+                                     select new
+                                     {
+                                         id = p.ProvinciaId,
+                                         nombre = p.Nombre
+                                     };
+            return Json(consultaProvincias);
+        }
+
+        public JsonResult obtenerDepartamentos(int ProvId)
+        {
+            var consultaDepartamentos = from d in _context.Departamentos
+                                        where d.ProvinciaId == ProvId
+                                        orderby d.Nombre
+                                        select new
+                                        {
+                                            id = d.DepartamentoId,
+                                            nombre = d.Nombre
+                                        };
+            return Json(consultaDepartamentos);
+        }
+
+        public JsonResult obtenerLocalidades(int DeptoId)
+        {
+            var consultaLocalidades = from l in _context.Localidades
+                                      where l.DepartamentoId == DeptoId
+                                      orderby l.Nombre
+                                      select new
+                                      {
+                                          id = l.LocalidadId,
+                                          nombre = l.Nombre
+                                      };
+            return Json(consultaLocalidades);
         }
     }
 }

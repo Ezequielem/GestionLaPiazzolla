@@ -56,7 +56,7 @@ namespace GestionLaPiazzolla.Controllers
         public IActionResult Create()
         {
             //crearEvento();
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "AlumnoId", "Apellido");
+            listaDeAlumnos();
             return View();
         }
 
@@ -73,7 +73,7 @@ namespace GestionLaPiazzolla.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "AlumnoId", "Apellido", pago.AlumnoId);
+            listaDeAlumnos(pago);
             return View(pago);
         }
 
@@ -90,7 +90,7 @@ namespace GestionLaPiazzolla.Controllers
             {
                 return NotFound();
             }
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "AlumnoId", "Apellido", pago.AlumnoId);
+            listaDeAlumnos();
             return View(pago);
         }
 
@@ -126,7 +126,7 @@ namespace GestionLaPiazzolla.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "AlumnoId", "Apellido", pago.AlumnoId);
+            listaDeAlumnos(pago);
             return View(pago);
         }
 
@@ -163,6 +163,17 @@ namespace GestionLaPiazzolla.Controllers
         private bool PagoExists(int id)
         {
             return _context.Pagos.Any(e => e.PagoId == id);
+        }
+
+        private void listaDeAlumnos(object alumnoSeleccionado = null)
+        {
+            var consultaAlumno = from a in _context.Alumnos
+                                 orderby a.Apellido
+                                 select new {
+                                     AluId=a.AlumnoId,
+                                     NombreApellido=a.Nombre + " " + a.Apellido
+                                 };
+            ViewBag.AlumnoId = new SelectList(consultaAlumno.AsNoTracking(), "AluId", "NombreApellido", alumnoSeleccionado);
         }
 
         private void crearEvento()

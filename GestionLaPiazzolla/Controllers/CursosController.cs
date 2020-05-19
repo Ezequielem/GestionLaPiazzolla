@@ -172,8 +172,11 @@ namespace GestionLaPiazzolla.Controllers
         {
             var consultaProfesores = from p in _context.Profesores
                                      orderby p.Nombre
-                                     select p;
-            ViewBag.ProfesorId = new SelectList(consultaProfesores.AsNoTracking(), "ProfesorId", "Nombre", profesorSeleccionado);
+                                     select new { 
+                                     ProfeId=p.ProfesorId,
+                                     NombreApellido=p.Nombre + " " + p.Apellido
+                                     };
+            ViewBag.ProfesorId = new SelectList(consultaProfesores.AsNoTracking(), "ProfeId", "NombreApellido", profesorSeleccionado);
         }
     }
 }

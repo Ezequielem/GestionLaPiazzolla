@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Observacion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Alumno.Apellido)
+                @Html.DisplayFor(modelItem => item.Alumno.Nombre) @Html.DisplayFor(modelItem => item.Alumno.Apellido)
             </td>
             <td>
                 <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.PagoId">Editar</a> |

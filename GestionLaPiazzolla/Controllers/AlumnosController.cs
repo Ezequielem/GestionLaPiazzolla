@@ -22,12 +22,18 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Alumnos
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda)
         {
             ViewData["NombreSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "nombre_desc" : "";
             ViewData["ApellidoSortParametro"] = sortOrder == "Apellido" ? "apellido_desc" : "Apellido";
+            ViewData["FiltroActual"] = cadenaBusqueda;
             var alumnos = from a in _context.Alumnos
                           select a;
+            if (!String.IsNullOrEmpty(cadenaBusqueda))
+            {
+                alumnos = alumnos.Where(a => a.Apellido.Contains(cadenaBusqueda)
+                || a.Nombre.Contains(cadenaBusqueda));
+            }            
             switch (sortOrder)
             {
                 case "nombre_desc":

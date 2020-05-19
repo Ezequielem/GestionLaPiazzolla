@@ -1,0 +1,69 @@
+﻿@model IEnumerable<GestionLaPiazzolla.Models.Alumno_x_Curso>
+
+@{
+    ViewData["Title"] = "Inscripciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Inscripciones</h1>
+
+<p>
+    <a class="btn btn-info" asp-action="Create">Nueva inscripción</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Alumno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Curso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInscripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Activo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observacion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Alumno.Nombre) @Html.DisplayFor(modelItem => item.Alumno.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Curso.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInscripcion)
+            </td>
+            @if (item.Activo)
+            {
+                <td>
+                    <strong class="text-success">ACTIVO</strong>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <strong class="bg-danger">SUSPENDIDO</strong>
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Observacion)
+            </td>
+            <td>
+            <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.AlumnoId">Editar</a> |
+            <a class="btn btn-warning" asp-action="Details" asp-route-id="@item.AlumnoId">Detalles</a> |
+            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.AlumnoId">Borrar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

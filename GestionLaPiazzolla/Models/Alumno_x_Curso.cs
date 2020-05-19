@@ -11,15 +11,14 @@ namespace GestionLaPiazzolla.Models
         public int AlumnoId { get; set; }
         public int CursoId { get; set; }
         [Required]
+        [Display(Name = "Fecha y hora de inscipción")]
         public DateTime FechaInscripcion { get; set; }
         [Required]
+        [Display(Name = "Estado")]
         public bool Activo { get; set; }
-        [Required]
         [StringLength(512)]
         public string Observacion { get; set; }
-        [Required]
         public Alumno Alumno { get; set; }
-        [Required]  
         public Curso Curso { get; set; }
     }
 }

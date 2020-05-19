@@ -26,6 +26,9 @@ namespace GestionLaPiazzolla.Controllers
         {
             ViewData["NombreSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "nombre_desc" : "";
             ViewData["ApellidoSortParametro"] = sortOrder == "Apellido" ? "apellido_desc" : "Apellido";
+            ViewData["DniSortParametro"] = sortOrder == "Dni" ? "dni_desc" : "Dni";
+            ViewData["FechaSortParametro"] = sortOrder == "FechaDeNacimiento" ? "fecha_desc" : "FechaDeNacimiento";
+            ViewData["EmailSortParametro"] = sortOrder == "Email" ? "email_desc" : "Email";
             ViewData["FiltroActual"] = cadenaBusqueda;
             var alumnos = from a in _context.Alumnos
                           select a;
@@ -44,6 +47,24 @@ namespace GestionLaPiazzolla.Controllers
                     break;
                 case "apellido_desc":
                     alumnos = alumnos.OrderByDescending(a => a.Apellido);
+                    break;
+                case "Dni":
+                    alumnos = alumnos.OrderBy(a => a.Dni);
+                    break;
+                case "dni_desc":
+                    alumnos = alumnos.OrderByDescending(a => a.Dni);
+                    break;
+                case "FechaDeNacimiento":
+                    alumnos = alumnos.OrderBy(a => a.FechaDeNacimiento);
+                    break;
+                case "fecha_desc":
+                    alumnos = alumnos.OrderByDescending(a => a.FechaDeNacimiento);
+                    break;
+                case "Email":
+                    alumnos = alumnos.OrderBy(a => a.Email);
+                    break;
+                case "email_desc":
+                    alumnos = alumnos.OrderByDescending(a => a.Email);
                     break;
                 default:
                     alumnos = alumnos.OrderBy(a => a.Nombre);

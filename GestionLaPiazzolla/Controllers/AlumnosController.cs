@@ -22,9 +22,28 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Alumnos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Alumnos.ToListAsync());
+            ViewData["NombreSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "nombre_desc" : "";
+            ViewData["ApellidoSortParametro"] = sortOrder == "Apellido" ? "apellido_desc" : "Apellido";
+            var alumnos = from a in _context.Alumnos
+                          select a;
+            switch (sortOrder)
+            {
+                case "nombre_desc":
+                    alumnos = alumnos.OrderByDescending(a => a.Nombre);
+                    break;
+                case "Apellido":
+                    alumnos = alumnos.OrderBy(a => a.Apellido);
+                    break;
+                case "apellido_desc":
+                    alumnos = alumnos.OrderByDescending(a => a.Apellido);
+                    break;
+                default:
+                    alumnos = alumnos.OrderBy(a => a.Nombre);
+                    break;
+            }
+            return View(await alumnos.AsNoTracking().ToListAsync());
         }
 
         // GET: Alumnos/Details/5

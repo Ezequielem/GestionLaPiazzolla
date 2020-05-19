@@ -10,8 +10,17 @@
 <p>
     <a class="btn btn-info" asp-action="Create">Nuevo curso</a>
 </p>
+
+<nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" asp-action="Index">Listado completo</a>
+    <form class="form-inline" asp-action="Index" method="get">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar por nombre" aria-label="Search" name="cadenaBusqueda" value="@ViewData["FiltroActual"]">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Buscar</button>
+    </form>
+</nav>
+
 <table class="table">
-    <thead>
+    <thead class="thead-light">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Cursos.First().Nombre)
@@ -25,6 +34,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Cursos.First().Profesor)
             </th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -56,11 +67,11 @@
                     }
                 }
             </td>
-            <td>
-                <a class="btn btn-primary" asp-action="Index" asp-route-id="@item.CursoId">Seleccionar</a> |
-                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
-                <a class="btn btn-warning" asp-action="Details" asp-route-id="@item.CursoId">Detalles</a> |
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CursoId">Borrar</a>
+            <td class="text-right">
+                <a class="btn btn-outline-primary" asp-action="Index" asp-route-id="@item.CursoId">Seleccionar</a> |
+                <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
+                <a class="btn btn-outline-warning" asp-action="Details" asp-route-id="@item.CursoId">Detalles</a> |
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.CursoId">Borrar</a>
             </td>
         </tr>
 }

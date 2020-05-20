@@ -27,10 +27,49 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Pagos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda)
         {
-            var applicationDbContext = _context.Pagos.Include(p => p.Alumno);
-            return View(await applicationDbContext.ToListAsync());
+            ViewData["AlumnoSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "alumno_desc" : "";
+            ViewData["MontoSortParametro"] = sortOrder == "Monto" ? "monto_desc" : "Monto";
+            ViewData["FechaSortParametro"] = sortOrder == "FechaPago" ? "fecha_desc" : "FechaPago";
+            ViewData["ObservacionSortParametro"] = sortOrder == "Observacion" ? "obser_desc" : "Observacion";
+
+            ViewData["FiltroActual"] = cadenaBusqueda;
+            var pagos = from p in _context.Pagos.Include(a => a.Alumno)
+                        select p;
+            if (!String.IsNullOrEmpty(cadenaBusqueda))
+            {
+                pagos = pagos.Where(p => p.Alumno.Nombre.Contains(cadenaBusqueda)
+                                    || p.Alumno.Apellido.Contains(cadenaBusqueda));
+            }
+            switch (sortOrder)
+            {
+                case "alumno_desc":
+                    pagos = pagos.OrderByDescending(p => p.Alumno.Apellido);
+                    break;
+                case "Monto":
+                    pagos = pagos.OrderBy(p => p.Monto);
+                    break;
+                case "monto_desc":
+                    pagos = pagos.OrderByDescending(p => p.Monto);
+                    break;
+                case "FechaPago":
+                    pagos = pagos.OrderBy(p => p.FechaPago);
+                    break;
+                case "fecha_desc":
+                    pagos = pagos.OrderByDescending(p => p.FechaPago);
+                    break;
+                case "Observacion":
+                    pagos = pagos.OrderBy(p => p.Observacion);
+                    break;
+                case "obser_desc":
+                    pagos = pagos.OrderByDescending(p => p.Observacion);
+                    break;
+                default:
+                    pagos = pagos.OrderBy(p => p.Alumno.Apellido);
+                    break;
+            }
+            return View(await pagos.AsNoTracking().ToListAsync());
         }
 
         // GET: Pagos/Details/5

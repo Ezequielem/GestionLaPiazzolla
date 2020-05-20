@@ -23,10 +23,15 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Cursos
-        public async Task<IActionResult> Index(int? id, int? alumnoId)
+        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda)
         {
-            var ViewModel = new CursoIndexData();
-            ViewModel.Cursos = await _context.Cursos
+            ViewData["NombreSortOrder"] = String.IsNullOrEmpty(sortOrder) ? "nombre_desc" : "";
+            ViewData["PrecioMensualSortOrder"] = sortOrder == "PrecioMensual" ? "precio_desc" : "PrecioMensual";
+            ViewData["DescripcionSortOrder"] = sortOrder == "Descripcion" ? "descrip_desc" : "Descripcion";
+            ViewData["ProfesorSortOrder"] = sortOrder == "Profesor" ? "prof_desc" : "Profesor";
+            ViewData["FiltroActual"] = cadenaBusqueda;
+            var vistaModelo = new CursoIndexData();
+            vistaModelo.Cursos = await _context.Cursos
                 .Include(p => p.Profesor)
                     .ThenInclude(p => p.Direccion)
                 .Include(p => p.Alumnos_X_Cursos)
@@ -35,22 +40,38 @@ namespace GestionLaPiazzolla.Controllers
                 .AsNoTracking()
                 .OrderBy(p => p.Nombre)
                 .ToListAsync();
-            //var cursos = _context.Cursos.Include(c=>c.Profesor).AsNoTracking();
-
-            if (id != null)
+            if (!String.IsNullOrEmpty(cadenaBusqueda))
             {
-                ViewData["CursoId"] = id.Value;
-                Curso curso = ViewModel.Cursos.Where(c => c.CursoId == id.Value).Single();
-                ViewModel.Alumnos = curso.Alumnos_X_Cursos.Select(s => s.Alumno);
+                vistaModelo.Cursos = vistaModelo.Cursos.Where(c => c.Nombre.Contains(cadenaBusqueda));
             }
-
-            if (alumnoId != null)
+            switch (sortOrder)
             {
-                ViewData["AlumnoId"] = alumnoId.Value;
-                ViewModel.AlumnosCursos = ViewModel.Alumnos.Where(a => a.AlumnoId == alumnoId).Single().Alumnos_X_Cursos;
+                case "nombre_desc":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderByDescending(c => c.Nombre);
+                    break;
+                case "PrecioMensual":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderBy(c => c.PrecioMensual);
+                    break;
+                case "precio_desc":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderByDescending(c => c.PrecioMensual);
+                    break;
+                case "Descripcion":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderBy(c => c.Descripcion);
+                    break;
+                case "descrip_desc":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderByDescending(c => c.Descripcion);
+                    break;
+                case "Profesor":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderBy(c => c.Profesor.Apellido);
+                    break;
+                case "prof_desc":
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderByDescending(c => c.Profesor.Apellido);
+                    break;
+                default:
+                    vistaModelo.Cursos = vistaModelo.Cursos.OrderBy(c => c.Nombre);
+                    break;
             }
-
-            return View(ViewModel/*await _context.Cursos.ToListAsync()*/);
+            return View(vistaModelo);
         }
 
         // GET: Cursos/Details/5

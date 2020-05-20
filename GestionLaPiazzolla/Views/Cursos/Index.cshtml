@@ -17,22 +17,22 @@
         <input class="form-control mr-sm-2" type="search" placeholder="Buscar por nombre" aria-label="Search" name="cadenaBusqueda" value="@ViewData["FiltroActual"]">
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Buscar</button>
     </form>
-</nav>
+</nav>  
 
 <table class="table">
     <thead class="thead-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Cursos.First().Nombre)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NombreSortOrder"]">@Html.DisplayNameFor(model => model.Cursos.First().Nombre)</a>                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cursos.First().PrecioMensual)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PrecioMensualSortOrder"]">@Html.DisplayNameFor(model => model.Cursos.First().PrecioMensual)</a>                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cursos.First().Descripcion)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DescripcionSortOrder"]">@Html.DisplayNameFor(model => model.Cursos.First().Descripcion)</a>                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cursos.First().Profesor)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ProfesorSortOrder"]">@Html.DisplayNameFor(model => model.Cursos.First().Profesor)</a>                
             </th>
             <th></th>
             <th></th>

@@ -22,9 +22,55 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Profesores
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda)
         {
-            return View(await _context.Profesores.ToListAsync());
+            ViewData["NombreSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "nombre_desc" : "";
+            ViewData["ApellidoSortParametro"] = sortOrder == "Apellido" ? "apellido_desc" : "Apellido";
+            ViewData["DniSortParametro"] = sortOrder == "Dni" ? "dni_desc" : "Dni";
+            ViewData["FechaSortParametro"] = sortOrder == "FechaDeNacimiento" ? "fecha_desc" : "FechaDeNacimiento";
+            ViewData["EmailSortParametro"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["FiltroActual"] = cadenaBusqueda;
+            var profesores = from p in _context.Profesores
+                             select p;
+            if (!String.IsNullOrEmpty(cadenaBusqueda))
+            {
+                profesores = profesores.Where(p => p.Nombre.Contains(cadenaBusqueda)
+                                                || p.Apellido.Contains(cadenaBusqueda));
+            }
+            switch (sortOrder)
+            {
+                case "nombre_desc":
+                    profesores = profesores.OrderByDescending(p => p.Nombre);
+                    break;
+                case "Apellido":
+                    profesores = profesores.OrderBy(p => p.Apellido);
+                    break;
+                case "apellido_desc":
+                    profesores = profesores.OrderByDescending(p => p.Apellido);
+                    break;
+                case "Dni":
+                    profesores = profesores.OrderBy(p => p.Dni);
+                    break;
+                case "dni_desc":
+                    profesores = profesores.OrderByDescending(p => p.Dni);
+                    break;
+                case "FechaDeNacimiento":
+                    profesores = profesores.OrderBy(p => p.FechaDeNacimiento);
+                    break;
+                case "fecha_desc":
+                    profesores = profesores.OrderByDescending(p => p.FechaDeNacimiento);
+                    break;
+                case "Email":
+                    profesores = profesores.OrderBy(p => p.Email);
+                    break;
+                case "email_desc":
+                    profesores = profesores.OrderByDescending(p => p.Email);
+                    break;
+                default:
+                    profesores = profesores.OrderBy(p => p.Nombre);
+                    break;
+            }
+            return View(await profesores.AsNoTracking().ToListAsync());
         }
 
         // GET: Profesores/Details/5

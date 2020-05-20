@@ -20,10 +20,55 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Inscripciones
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda)
         {
-            var applicationDbContext = _context.Alumnos_X_Cursos.Include(a => a.Alumno).Include(a => a.Curso);
-            return View(await applicationDbContext.ToListAsync());
+            ViewData["AlumnoSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "alumno_desc" : "";
+            ViewData["CursoSortParametro"] = sortOrder == "Curso" ? "curso_desc" : "Curso";
+            ViewData["FechaSortParametro"] = sortOrder == "FechaInscripcion" ? "fecha_desc" : "FechaInscripcion";
+            ViewData["ActivoSortParametro"] = sortOrder == "Activo" ? "activo_desc" : "Activo";
+            ViewData["ObservSortParametro"] = sortOrder == "Observacion" ? "observ_desc" : "Observacion";
+            ViewData["FiltroActual"] = cadenaBusqueda;
+            var inscripciones = from i in _context.Alumnos_X_Cursos.Include(a => a.Alumno).Include(a => a.Curso)
+                                select i;
+            if (!String.IsNullOrEmpty(cadenaBusqueda))
+            {
+                inscripciones = inscripciones.Where(i => i.Alumno.Nombre.Contains(cadenaBusqueda)
+                                                    || i.Alumno.Apellido.Contains(cadenaBusqueda));
+            }
+            switch (sortOrder)
+            {
+                case "alumno_desc":
+                    inscripciones = inscripciones.OrderByDescending(i => i.Alumno.Apellido);
+                    break;
+                case "Curso":
+                    inscripciones = inscripciones.OrderBy(i => i.Curso.Nombre);
+                    break;
+                case "curso_desc":
+                    inscripciones = inscripciones.OrderByDescending(i => i.Curso.Nombre);
+                    break;
+                case "FechaInscripcion":
+                    inscripciones = inscripciones.OrderBy(i => i.FechaInscripcion);
+                    break;
+                case "fecha_desc":
+                    inscripciones = inscripciones.OrderByDescending(i => i.FechaInscripcion);
+                    break;
+                case "Activo":
+                    inscripciones = inscripciones.OrderBy(i => i.Activo);
+                    break;
+                case "activo_desc":
+                    inscripciones = inscripciones.OrderByDescending(i => i.Activo);
+                    break;
+                case "Observacion":
+                    inscripciones = inscripciones.OrderBy(i => i.Observacion);
+                    break;
+                case "observ_desc":
+                    inscripciones = inscripciones.OrderByDescending(i => i.Observacion);
+                    break;
+                default:
+                    inscripciones = inscripciones.OrderBy(i => i.Alumno.Apellido);
+                    break;
+            }
+            return View(await inscripciones.AsNoTracking().ToListAsync());
         }
 
         // GET: Inscripciones/Details/5

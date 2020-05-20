@@ -1,11 +1,11 @@
 ﻿@model GestionLaPiazzolla.Models.Alumno_x_Curso
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edición";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Alumno_x_Curso</h4>
 <hr />
@@ -31,14 +31,14 @@
                 <span asp-validation-for="Observacion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver al listado</a>
 </div>
 
 @section Scripts {

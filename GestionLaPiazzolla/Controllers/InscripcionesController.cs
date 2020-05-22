@@ -72,17 +72,18 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Inscripciones/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? idAlumno, int? idCurso)
         {
-            if (id == null)
+            if (idAlumno == null || idCurso == null)
             {
                 return NotFound();
             }
 
+
             var alumno_x_Curso = await _context.Alumnos_X_Cursos
                 .Include(a => a.Alumno)
-                .Include(a => a.Curso)
-                .FirstOrDefaultAsync(m => m.AlumnoId == id);
+                .Include(a => a.Curso)                
+                .FirstOrDefaultAsync(m => m.AlumnoId == idAlumno && m.CursoId == idCurso);
             if (alumno_x_Curso == null)
             {
                 return NotFound();
@@ -126,14 +127,17 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Inscripciones/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? idAlumno, int? idCurso)
         {
-            if (id == null)
+            if (idAlumno == null || idCurso == null)
             {
                 return NotFound();
             }
 
-            var alumno_x_Curso = await _context.Alumnos_X_Cursos.FindAsync(id);
+            var alumno_x_Curso = await _context.Alumnos_X_Cursos
+                .Include(a => a.Curso)
+                .Include(a => a.Alumno)
+                .FirstOrDefaultAsync(a => a.AlumnoId == idAlumno && a.CursoId == idCurso);
             if (alumno_x_Curso == null)
             {
                 return NotFound();

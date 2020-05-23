@@ -185,9 +185,9 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Inscripciones/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? idAlumno, int? idCurso)
         {
-            if (id == null)
+            if (idAlumno == null || idCurso == null)
             {
                 return NotFound();
             }
@@ -195,7 +195,7 @@ namespace GestionLaPiazzolla.Controllers
             var alumno_x_Curso = await _context.Alumnos_X_Cursos
                 .Include(a => a.Alumno)
                 .Include(a => a.Curso)
-                .FirstOrDefaultAsync(m => m.AlumnoId == id);
+                .FirstOrDefaultAsync(m => m.AlumnoId == idAlumno && m.CursoId == idCurso);
             if (alumno_x_Curso == null)
             {
                 return NotFound();
@@ -207,9 +207,9 @@ namespace GestionLaPiazzolla.Controllers
         // POST: Inscripciones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int idAlumno, int idCurso)
         {
-            var alumno_x_Curso = await _context.Alumnos_X_Cursos.FindAsync(id);
+            var alumno_x_Curso = await _context.Alumnos_X_Cursos.FirstOrDefaultAsync(m => m.AlumnoId == idAlumno && m.CursoId == idCurso);
             _context.Alumnos_X_Cursos.Remove(alumno_x_Curso);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

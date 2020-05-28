@@ -13,6 +13,8 @@ using Google.Apis.Auth.OAuth2;
 using System.IO;
 using Google.Apis.Services;
 using Google.Apis.Calendar.v3.Data;
+using GestionLaPiazzolla.Reports;
+using Microsoft.AspNetCore.Hosting;
 
 namespace GestionLaPiazzolla.Controllers
 {
@@ -20,10 +22,12 @@ namespace GestionLaPiazzolla.Controllers
     public class PagosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public PagosController(ApplicationDbContext context)
+        public PagosController(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Pagos
@@ -199,6 +203,42 @@ namespace GestionLaPiazzolla.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> ImpresionRecibo(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var pago = await _context.Pagos
+                .Include(p => p.Alumno)                
+                .FirstOrDefaultAsync(p => p.PagoId == id);
+
+            if (pago == null)
+            {
+                return NotFound();
+            }
+            return View(pago);
+        }
+
+        public async Task<IActionResult> Recibo(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var pago = await _context.Pagos
+                .Include(p => p.Alumno)
+                .FirstOrDefaultAsync(p => p.PagoId == id);
+
+            if (pago == null)
+            {
+                return NotFound();  
+            }
+            ReporteRecibo recibo = new ReporteRecibo(_env);
+
+            return File(recibo.imprimirRecibo(pago), "application/pdf");
+        }
+
         private bool PagoExists(int id)
         {
             return _context.Pagos.Any(e => e.PagoId == id);
@@ -248,7 +288,7 @@ namespace GestionLaPiazzolla.Controllers
             //Console.WriteLine(calendar.Summary);
             acumulador += "Calendar Name : \n";
             acumulador += calendar.Summary + "\n";
-            acumulador += "\n\nclick for more .. \n\n";            
+            acumulador += "\n\nclick for more .. \n\n";
 
 
             // Define parameters of request.

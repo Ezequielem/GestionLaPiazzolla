@@ -1,0 +1,208 @@
+﻿@model GestionLaPiazzolla.Models.Pago
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Recibo</title>
+</head>
+<body>
+    <div style="width: 860px; border: solid;padding: 20px; margin: 20px;align-content: center;">
+        <table style="width: 100%; border-spacing: 0px;">
+            <tr>
+                <td style="width: 500px; border-left: solid; border-top: solid;border-bottom: solid; border-top-left-radius: 15px; border-bottom-left-radius: 15px; margin-right: 0px; padding-right: 0px; border-spacing: 0px;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="text-align: center;">
+                                <image src="@Url.Content("~/Images/logoPiazzolla.jpg")" style="width: 90%;"></image>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">
+                                <p style="font-size: 12px;">Canto - Piano - Teclado - Violín - Ukelele - Teclado - Guitarra - Guitarra Eléctrica</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">
+                                <p style="border-style: solid; margin-left: 50px; margin-right: 50px; border-color: green; border-radius: 10px;"><image src="@Url.Content("~/images/whatsapp.png")" style="height: 20px; vertical-align:bottom"></image> Cel: 153580929 - 156371917</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="border-style: solid;border-top-right-radius: 15px; border-bottom-right-radius: 15px; margin-left: 0px; padding-left: 30px; padding-right: 30px;text-align: center;">
+                    <table style="width: 100%; border-spacing: 0px;">
+                        <tr style="text-align: center;">
+                            <td>
+                                <p>Día</p>
+                            </td>
+                            <td>
+                                <p>Mes</p>
+                            </td>
+                            <td>
+                                <p>Año</p>
+                            </td>
+                        </tr>
+                        <tr style="font-size: 20px; padding-left: 20px; height: 70px;">
+                            <td style="border-left: solid; border-top: solid; border-bottom: solid; border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
+                                @Model.FechaPago.Day
+                            </td>
+                            <td style="border-top: solid; border-bottom: solid;">
+                                @Model.FechaPago.Month
+                            </td>
+                            <td style="border-right: solid; border-top: solid; border-bottom: solid; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                                @Model.FechaPago.Year
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: center;">
+                                <p style="font-size: 10px;">DOCUMENTO NO VÁLIDO COMO FACTURA</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="height: 10px;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: solid;border-radius: 10px;text-align: left;padding-left: 20px; height: 70px; font-size: 20px;">
+                    <p style="max-width: 90%; overflow-x:hidden; overflow-y: hidden;">
+                        Alumno: @Model.Alumno.Nombre @Model.Alumno.Apellido
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="height: 10px;"></td>
+            </tr>
+            <tr>
+                <td style="width: 500px; height: 338px; max-height: 338px; border-left: solid; border-top: solid;border-bottom: solid; border-top-left-radius: 15px; border-bottom-left-radius: 15px; margin-right: 0px; padding: 0px; border-spacing: 0px;">
+                    <table style="width: 100%;height: 250px;border-spacing: 0px;">
+                        <tr>
+                            <td style="padding-left: 20px;font-size: 20px;height: 50px; max-height: 40px; border-bottom: solid;">
+                                <b>Instrumento</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid; height: 68px; padding-left: 20px; max-width: 470px; max-height: 68px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid; height: 68px; padding-left: 20px; max-width: 470px; max-height: 68px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid; height: 68px; padding-left: 20px; max-width: 470px; max-height: 68px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 68px; padding-left: 20px; max-width: 470px; max-height: 68px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="height: 338px; max-height: 338px; border-top: solid; border-right: solid; border-bottom: solid; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding: 0px;">
+                    <table style="width: 100%; height: 250px; border-spacing: 0px; text-align: center;">
+                        <tr>
+                            <td style="font-size: 20px;height: 50px; max-height: 50px; max-width: 194px; border-bottom: solid;border-right: solid; width: 55%; border-left: solid; overflow-x: hidden; overflow-y: hidden;">
+                                <b>Cantidad de Clases</b>
+                            </td>
+                            <td style="font-size: 20px;height: 50px; max-height: 50px; max-width: 159px; border-bottom: solid; overflow-x: hidden; overflow-y: hidden;">
+                                <b>Total</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid; border-right: 1px solid; height: 68px; max-height: 68px; border-left: 1px solid; max-width: 194px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                            <td style="border-bottom: 1px solid; height: 68px; max-height: 68px; max-width: 159px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid; border-right: 1px solid; height: 68px; max-height: 68px; border-left: 1px solid; max-width: 194px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                            <td style="border-bottom: 1px solid; height: 68px; max-height: 68px; max-width: 159px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 1px solid; border-right: 1px solid; height: 68px; max-height: 68px; border-left: 1px solid; max-width: 194px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                            <td style="border-bottom: 1px solid; height: 68px; max-height: 68px; max-width: 159px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-right: 1px solid; height: 68px; max-height: 68px; border-left: 1px solid; max-width: 194px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                            <td style=" height: 68px; max-height: 68px; max-width: 159px; overflow-x: hidden; overflow-y: hidden;">
+                                <p>
+                                    @*@*@
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="height: 10px;"></td>
+            </tr>
+        </table>
+        <table style="width: 100%; height: 100px; max-height: 100px; border-spacing: 0px;">
+            <tr>
+                <td style="width: 600px; max-width: 600px; overflow-x:hidden; overflow-y: hidden; font-size: 16px;">
+                    <p>
+                        Observaciones: @Model.Observacion
+                    </p>
+                </td>
+                <td style="width: 100px;font-size: 20px; text-align: center;">
+                    <p>TOTAL   $</p>
+                </td>
+                <td style="padding: 3px; font-size: 25px; text-align: center">
+                    <table style="width: 100%; height: 70%;">
+                        <tr>
+                            <td style="border: solid; max-width: 140px; height: 80%;overflow-x: hidden; overflow-y: hidden;text-align: center;">
+                                <b>@Model.Monto.ToString("0.00")</b>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

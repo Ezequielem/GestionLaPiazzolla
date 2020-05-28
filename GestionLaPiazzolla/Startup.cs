@@ -96,6 +96,7 @@ namespace GestionLaPiazzolla
                 endpoints.MapRazorPages();
             });
             DbInitializer.Initialize(context);
+            Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath, ".\\Rotativa\\bin");
         }
     }
 }

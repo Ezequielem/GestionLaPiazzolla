@@ -15,6 +15,7 @@ using Google.Apis.Services;
 using Google.Apis.Calendar.v3.Data;
 using GestionLaPiazzolla.Reports;
 using Microsoft.AspNetCore.Hosting;
+using Rotativa.AspNetCore;
 
 namespace GestionLaPiazzolla.Controllers
 {
@@ -217,7 +218,13 @@ namespace GestionLaPiazzolla.Controllers
             {
                 return NotFound();
             }
-            return View(pago);
+            //return View(pago);
+            return new ViewAsPdf("ImpresionRecibo", pago)
+            {
+                FileName = "Recibo" + pago.PagoId + ".pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
         }
 
         public async Task<IActionResult> Recibo(int? id)

@@ -34,27 +34,27 @@
                         </tr>
                     </table>
                 </td>
-                <td style="border-style: solid;border-top-right-radius: 15px; border-bottom-right-radius: 15px; margin-left: 0px; padding-left: 30px; padding-right: 30px;text-align: center;">
+                <td style="width: 350px; border-left: solid; border-top: solid; border-right: solid; border-bottom: solid; border-top-right-radius: 15px; border-bottom-right-radius: 15px; text-align: center; padding-left: 30px; padding-right: 30px">
                     <table style="width: 100%; border-spacing: 0px;">
                         <tr style="text-align: center;">
-                            <td>
+                            <td style="border-right: hidden">
                                 <p>Día</p>
                             </td>
-                            <td>
+                            <td style="border-right: hidden; border-left: hidden">
                                 <p>Mes</p>
                             </td>
-                            <td>
+                            <td style="border-left:hidden">
                                 <p>Año</p>
                             </td>
                         </tr>
                         <tr style="font-size: 20px; padding-left: 20px; height: 70px;">
-                            <td style="border-left: solid; border-top: solid; border-bottom: solid; border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
+                            <td style="border-left: solid; border-top: solid; border-bottom: solid; border-right: 1px solid; border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
                                 @Model.FechaPago.Day
                             </td>
-                            <td style="border-top: solid; border-bottom: solid;">
+                            <td style="border-top: solid; border-bottom: solid; border-right: 1px solid; border-left: 1px solid;">
                                 @Model.FechaPago.Month
                             </td>
-                            <td style="border-right: solid; border-top: solid; border-bottom: solid; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                            <td style="border-right: solid; border-top: solid; border-bottom: solid; border-left: 1px solid; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
                                 @Model.FechaPago.Year
                             </td>
                         </tr>
@@ -70,14 +70,15 @@
                 <td colspan="2" style="height: 10px;"></td>
             </tr>
             <tr>
-                <td colspan="2" style="border: solid;border-radius: 10px;text-align: left;padding-left: 20px; height: 70px; font-size: 20px;">
+                <td colspan="2" style="border: solid;border-radius: 10px;text-align: left;padding-left: 20px; height: 70px; font-size: 22px;">
                     <p style="max-width: 90%; overflow-x:hidden; overflow-y: hidden;">
                         Alumno: @Model.Alumno.Nombre @Model.Alumno.Apellido
                     </p>
                 </td>
             </tr>
             <tr>
-                <td colspan="2" style="height: 10px;"></td>
+                <td colspan="2" style="        height: 10px;
+"></td>
             </tr>
             <tr>
                 <td style="width: 500px; height: 338px; max-height: 338px; border-left: solid; border-top: solid;border-bottom: solid; border-top-left-radius: 15px; border-bottom-left-radius: 15px; margin-right: 0px; padding: 0px; border-spacing: 0px;">

@@ -32,7 +32,7 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Pagos
-        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda)
+        public async Task<IActionResult> Index(string sortOrder, string cadenaBusqueda, int id)
         {
             ViewData["AlumnoSortParametro"] = String.IsNullOrEmpty(sortOrder) ? "alumno_desc" : "";
             ViewData["MontoSortParametro"] = sortOrder == "Monto" ? "monto_desc" : "Monto";
@@ -40,8 +40,11 @@ namespace GestionLaPiazzolla.Controllers
             ViewData["ObservacionSortParametro"] = sortOrder == "Observacion" ? "obser_desc" : "Observacion";
 
             ViewData["FiltroActual"] = cadenaBusqueda;
-            var pagos = from p in _context.Pagos.Include(a => a.Alumno)
-                        select p;
+            var alumno = _context.Alumnos.Where(a => a.AlumnoId == id).FirstOrDefault();
+            ViewBag.Nombre = alumno.Nombre + " " + alumno.Apellido;
+            ViewBag.IdAlumno = alumno.AlumnoId;
+            var pagos = _context.Pagos.Include(a => a.Alumno).Where(a => a.AlumnoId == id);
+            
             if (!String.IsNullOrEmpty(cadenaBusqueda))
             {
                 pagos = pagos.Where(p => p.Alumno.Nombre.Contains(cadenaBusqueda)
@@ -97,10 +100,17 @@ namespace GestionLaPiazzolla.Controllers
         }
 
         // GET: Pagos/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
             //crearEvento();
-            listaDeAlumnos();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var alumno = _context.Alumnos.Where(a => a.AlumnoId == id).FirstOrDefault();
+            ViewBag.Nombre = alumno.Nombre + " " + alumno.Apellido;
+            ViewData["IdAlumno"] = alumno.AlumnoId;
+            ViewBag.IdAlumno = alumno.AlumnoId;
             return View();
         }
 
@@ -115,9 +125,8 @@ namespace GestionLaPiazzolla.Controllers
             {
                 _context.Add(pago);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = pago.AlumnoId });
             }
-            listaDeAlumnos(pago);
             return View(pago);
         }
 
@@ -129,12 +138,13 @@ namespace GestionLaPiazzolla.Controllers
                 return NotFound();
             }
 
-            var pago = await _context.Pagos.FindAsync(id);
+            var pago = await _context.Pagos
+                .Include(x => x.Alumno)
+                .FirstOrDefaultAsync(x => x.PagoId == id);
             if (pago == null)
             {
                 return NotFound();
             }
-            listaDeAlumnos();
             return View(pago);
         }
 
@@ -168,9 +178,8 @@ namespace GestionLaPiazzolla.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = pago.AlumnoId});
             }
-            listaDeAlumnos(pago);
             return View(pago);
         }
 
@@ -198,10 +207,12 @@ namespace GestionLaPiazzolla.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pago = await _context.Pagos.FindAsync(id);
+            var pago = await _context.Pagos
+                .Include(p => p.Alumno)
+                .FirstOrDefaultAsync(m => m.PagoId == id);
             _context.Pagos.Remove(pago);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = pago.AlumnoId});
         }
 
         public async Task<IActionResult> ImpresionRecibo(int? id)
@@ -218,7 +229,6 @@ namespace GestionLaPiazzolla.Controllers
             {
                 return NotFound();
             }
-            //return View(pago);
             return new ViewAsPdf("ImpresionRecibo", pago)
             {
                 FileName = "Recibo" + pago.PagoId + ".pdf",
@@ -249,17 +259,6 @@ namespace GestionLaPiazzolla.Controllers
         private bool PagoExists(int id)
         {
             return _context.Pagos.Any(e => e.PagoId == id);
-        }
-
-        private void listaDeAlumnos(object alumnoSeleccionado = null)
-        {
-            var consultaAlumno = from a in _context.Alumnos
-                                 orderby a.Apellido
-                                 select new {
-                                     AluId=a.AlumnoId,
-                                     NombreApellido=a.Nombre + " " + a.Apellido
-                                 };
-            ViewBag.AlumnoId = new SelectList(consultaAlumno.AsNoTracking(), "AluId", "NombreApellido", alumnoSeleccionado);
         }
 
         private void crearEvento()

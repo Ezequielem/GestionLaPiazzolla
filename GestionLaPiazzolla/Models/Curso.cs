@@ -19,7 +19,7 @@ namespace GestionLaPiazzolla.Models
         [Column(TypeName = "money")]
         public float PrecioMensual { get; set; }
         [Required]
-        [StringLength(512, ErrorMessage ="La deescripcion puede tener 512 caracteres" )]
+        [StringLength(512, ErrorMessage ="La descripción puede tener 512 caracteres" )]
         [Display(Name ="Descripción")]
         public string Descripcion { get; set; }
         [Required]

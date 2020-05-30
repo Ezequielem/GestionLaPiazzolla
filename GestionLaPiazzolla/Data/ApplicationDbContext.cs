@@ -20,6 +20,9 @@ namespace GestionLaPiazzolla.Data
             modelBuilder.Entity<Alumno_x_Curso>().HasKey(x => new { x.AlumnoId, x.CursoId });
             modelBuilder.Entity<Alumno_x_Curso>().HasOne(x => x.Alumno).WithMany(z => z.Alumnos_X_Cursos).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Alumno_x_Curso>().HasOne(x => x.Curso).WithMany(z => z.Alumnos_X_Cursos).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Alumno_x_Clase>().HasKey(x => new { x.AlumnoId, x.ClaseId});
+            modelBuilder.Entity<Alumno_x_Clase>().HasOne(x => x.Alumno).WithMany(z => z.Alumnos_X_Clases).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Alumno_x_Clase>().HasOne(x => x.Clase).WithMany(z => z.Alumnos_X_Clases).OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Sexo> Sexo { get; set; }
@@ -27,7 +30,10 @@ namespace GestionLaPiazzolla.Data
         public DbSet<Pago> Pagos { get; set; }
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Curso> Cursos { get; set; }
+        public DbSet<Clase> Clases { get; set; }
+        public DbSet<DetalleDePago> DetallesDePagos { get; set; }
         public DbSet<Alumno_x_Curso> Alumnos_X_Cursos { get; set; }
+        public DbSet<Alumno_x_Clase> Alumnos_X_Clases { get; set; }
         public DbSet<Profesor> Profesores { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }

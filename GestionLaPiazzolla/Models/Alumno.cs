@@ -34,5 +34,6 @@ namespace GestionLaPiazzolla.Models
         public Direccion Direccion { get; set; }
         public List<Pago> Pagos { get; set; }
         public List<Alumno_x_Curso> Alumnos_X_Cursos { get; set; }
+        public List<Alumno_x_Clase> Alumnos_X_Clases { get; set; }
     }
 }

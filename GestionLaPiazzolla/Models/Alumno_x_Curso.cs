@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionLaPiazzolla.Models
 {
@@ -13,6 +14,10 @@ namespace GestionLaPiazzolla.Models
         [Required]
         [Display(Name = "Fecha y hora de inscipción")]
         public DateTime FechaInscripcion { get; set; }
+        [Required]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public float Monto { get; set; }
         [Required]
         [Display(Name = "Estado")]
         public bool Activo { get; set; }

@@ -14,6 +14,7 @@ namespace GestionLaPiazzolla.Models
         [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 50 caracteres")]
         public string Nombre { get; set; }
         [Required]
+        [Display(Name = "Fecha y hora")]
         public DateTime FechaYHora { get; set; }
         [Display(Name = "Observación")]
         public string Observacion { get; set; }

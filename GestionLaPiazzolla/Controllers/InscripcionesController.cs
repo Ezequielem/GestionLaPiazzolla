@@ -105,7 +105,7 @@ namespace GestionLaPiazzolla.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlumnoId,CursoId,FechaInscripcion,Activo,Observacion")] Alumno_x_Curso alumno_x_Curso)
+        public async Task<IActionResult> Create([Bind("AlumnoId,CursoId,FechaInscripcion,Activo,Monto,Observacion")] Alumno_x_Curso alumno_x_Curso)
         {
             if (Alumno_x_CursoExists(alumno_x_Curso.AlumnoId, alumno_x_Curso.CursoId))
             {
@@ -152,12 +152,12 @@ namespace GestionLaPiazzolla.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlumnoId,CursoId,FechaInscripcion,Activo,Observacion")] Alumno_x_Curso alumno_x_Curso)
+        public async Task<IActionResult> Edit(/*int idAlumno, int idCurso, */[Bind("AlumnoId,CursoId,FechaInscripcion,Activo,Monto,Observacion")] Alumno_x_Curso alumno_x_Curso)
         {
-            if (id != alumno_x_Curso.AlumnoId)
-            {
-                return NotFound();
-            }
+            //if (idAlumno != alumno_x_Curso.AlumnoId && idCurso != alumno_x_Curso.CursoId)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
